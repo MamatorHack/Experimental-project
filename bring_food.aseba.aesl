@@ -1,0 +1,46 @@
+<!DOCTYPE aesl-source>
+<network>
+
+
+<!--list of global events-->
+<event name="debug_log" size="14"/>
+<event name="pair_run" size="1"/>
+
+
+<!--node Thymio-II Robot-->
+<node name="Thymio-II Robot" nodeId="{8c304051-3fcb-446a-985d-e01a35d22497}"><![CDATA[# reset outputs
+call sound.system(-1)
+call leds.top(0,0,0)
+call leds.bottom.left(0,0,0)
+call leds.bottom.right(0,0,0)
+call leds.circle(0,0,0,0,0,0,0,0)
+
+onevent prox
+	when prox.ground.delta[0] >= 450 and prox.ground.delta[1] >= 450 do
+		motor.left.target = 200
+		motor.right.target = -50
+		emit pair_run 0
+	end
+
+	when prox.ground.delta[0] <= 400 and prox.ground.delta[1] <= 400 do
+		motor.left.target = 100
+		motor.right.target = 100
+		emit pair_run 1
+	end
+
+	when prox.ground.delta[0] >= 450 and prox.ground.delta[1] <= 400 do
+		motor.left.target = 150
+		motor.right.target = -100
+		emit pair_run 2
+	end
+
+	when prox.ground.delta[0] <= 400 and prox.ground.delta[1] >= 450 do
+		motor.left.target = -100
+		motor.right.target = 150
+		emit pair_run 3
+	end
+
+]]></node>
+
+
+</network>
